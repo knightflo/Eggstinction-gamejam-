@@ -16,6 +16,9 @@ public class Player_Controller : MonoBehaviour
 
     private bool CanJump = false;
 
+    private bool Jumping = false;
+    private bool Falling = false;
+
     [SerializeField] private Rigidbody2D rb;
 
     public void MoveLeft(InputAction.CallbackContext ctx)
@@ -61,5 +64,24 @@ public class Player_Controller : MonoBehaviour
         {
             gameObject.transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y);
         }
+
+
+        if (!CanJump && rb.linearVelocityY > 0.1f)
+        {
+            Jumping = true;
+            Falling = false;
+        }
+        else if (!CanJump && rb.linearVelocityY < -0.1f)
+        {
+            Jumping = false;
+            Falling = true;
+        }
+        else
+        {
+            Jumping = false;
+            Falling = false;
+        }
+
+
     }
 }
