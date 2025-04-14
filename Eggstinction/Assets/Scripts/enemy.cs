@@ -1,16 +1,29 @@
 using UnityEngine;
 
-public class enemy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public float speed = 2f;
+    public LayerMask wallLayer;
+
+    private bool movingRight = true;
+    private Rigidbody2D rb;
+
+    private void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        rb.linearVelocity = new Vector2(movingRight ? speed : -speed, rb.linearVelocity.y);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & wallLayer) != 0)
+        {
+            movingRight = !movingRight;
+            transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
+        }
     }
 }

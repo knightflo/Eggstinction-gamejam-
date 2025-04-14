@@ -64,8 +64,6 @@ public class Player_Controller : MonoBehaviour
         {
             gameObject.transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y);
         }
-
-
         if (!CanJump && rb.linearVelocityY > 0.1f)
         {
             Jumping = true;
@@ -81,7 +79,5 @@ public class Player_Controller : MonoBehaviour
             Jumping = false;
             Falling = false;
         }
-
-
     }
 }
