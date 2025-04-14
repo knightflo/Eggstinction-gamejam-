@@ -28,6 +28,9 @@ namespace Bas.Pennings.DevTools
             }
         }
 
+        /// <summary>
+        /// If you want to use this method, please use "protected override void Awake()" and call the base method using "base.Awake()".
+        /// </summary>
         protected virtual void Awake()
         {
             if (instance != null)
