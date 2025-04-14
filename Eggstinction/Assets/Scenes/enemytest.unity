@@ -133,9 +133,9 @@ GameObject:
   - component: {fileID: 38640140}
   - component: {fileID: 38640139}
   - component: {fileID: 38640138}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -690,6 +690,9 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 8
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!212 &1236411551
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -796,7 +799,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1542810121}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Groundcheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
