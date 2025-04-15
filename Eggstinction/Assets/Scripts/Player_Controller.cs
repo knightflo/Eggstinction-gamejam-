@@ -125,6 +125,8 @@ public class Player_Controller : MonoBehaviour
 
         gameObject.SetActive(false); // Hide current player before respawn
         Invoke(nameof(Respawn), 0.1f); // Slight delay to prevent double corpse spawning
+
+        EnemyManager.Instance.ResetEnemies(); // Reset enemies
     }
 
     private void Respawn()
