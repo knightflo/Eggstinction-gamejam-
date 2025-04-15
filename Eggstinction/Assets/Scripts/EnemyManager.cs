@@ -1,10 +1,14 @@
 using Bas.Pennings.DevTools;
 using System;
+using System.Collections;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyManager : AbstractSingleton<EnemyManager>
 {
+    [SerializeField] private float _enemySpawningDelay = 1;
+
     [Header("References")]
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _enemyObjectsParent;
@@ -14,28 +18,36 @@ public class EnemyManager : AbstractSingleton<EnemyManager>
     public void ResetEnemies()
     {
         DestroyEnemies();
-        InstantiateEnemies();
+        StartEnemySpawning();
     }
 
     private void Start()
-        => enemyObjects = InstantiateEnemies();
+        => StartEnemySpawning();
 
     private void DestroyEnemies()
     {
         foreach (var enemy in enemyObjects) Destroy(enemy);
     }
-
-    private GameObject[] InstantiateEnemies()
+    
+    public void StartEnemySpawning()
     {
-        var enemies = new GameObject[_enemySpawnPoints.Length];
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            var spawnPoint = _enemySpawnPoints[i];
-            for (int j = 0; j < spawnPoint.EnemyCount; j++)
-                enemies[i + j] = InstantiateEnemy(spawnPoint.SpawnPosition);
-        }
+        StartCoroutine(InstantiateEnemiesWithDelay());
 
-        return enemies;
+        IEnumerator InstantiateEnemiesWithDelay()
+        {
+            var totalEnemies = _enemySpawnPoints.Sum((sp) => sp.EnemyCount);
+            enemyObjects = new GameObject[totalEnemies];
+
+            for (int i = 0; i < _enemySpawnPoints.Length; i++)
+            {
+                var spawnPoint = _enemySpawnPoints[i];
+                for (int j = 0; j < spawnPoint.EnemyCount; j++)
+                {
+                    enemyObjects[i + j] = InstantiateEnemy(spawnPoint.SpawnPosition);
+                    yield return new WaitForSeconds(_enemySpawningDelay);
+                }
+            }
+        }
     }
 
     private GameObject InstantiateEnemy(Transform transform)
@@ -48,6 +60,7 @@ public class EnemyManager : AbstractSingleton<EnemyManager>
     [Serializable]
     private struct SpawnPoint
     {
+        public string Name;
         public Transform SpawnPosition;
 
         [Description("The amount of enemies which will spawn at the spawn position")]
