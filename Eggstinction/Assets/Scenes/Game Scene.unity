@@ -53934,7 +53934,7 @@ MonoBehaviour:
     m_Bits: 64
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   rb: {fileID: 757705024}
 --- !u!212 &757705028
 SpriteRenderer:
