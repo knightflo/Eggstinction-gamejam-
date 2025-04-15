@@ -100,6 +100,13 @@ public class Player_Controller : MonoBehaviour
 
     private void Die()
     {
+        // Find the main camera and deactivate it
+        GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        if (mainCamera != null)
+        {
+            mainCamera.SetActive(false);
+        }
+
         // Create the corpse at the death location
         GameObject corpse = Instantiate(gameObject, transform.position, transform.rotation);
 
