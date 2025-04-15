@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
     private bool movingRight = true;
     private Rigidbody2D rb;
 
+    [SerializeField] private int _scoreOnDeath = 100;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,6 +67,7 @@ public class Enemy : MonoBehaviour
             {
                 if (contact.normal.y < -0.5f) // Player hit from above
                 {
+                    ScoreManager.Instance.AddScore(_scoreOnDeath);
                     Destroy(gameObject);
                 }
             }
