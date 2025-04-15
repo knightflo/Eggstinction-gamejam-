@@ -14,9 +14,12 @@ public class EnemyManager : AbstractSingleton<EnemyManager>
     [SerializeField] private GameObject _enemyObjectsParent;
     [SerializeField] private SpawnPoint[] _enemySpawnPoints;
     private GameObject[] enemyObjects;
+    private Coroutine enemySpawningRoutine;
+
 
     public void ResetEnemies()
     {
+        StopEnemySpawning();
         DestroyEnemies();
         StartEnemySpawning();
     }
@@ -27,23 +30,33 @@ public class EnemyManager : AbstractSingleton<EnemyManager>
     private void DestroyEnemies()
     {
         foreach (var enemy in enemyObjects) Destroy(enemy);
+        enemyObjects = null;
     }
-    
-    public void StartEnemySpawning()
+
+    private void StopEnemySpawning()
     {
-        StartCoroutine(InstantiateEnemiesWithDelay());
+        if (enemySpawningRoutine != null)
+        {
+            StopCoroutine(enemySpawningRoutine);
+            enemySpawningRoutine = null;
+        }
+    }
+
+    private void StartEnemySpawning()
+    {
+        enemySpawningRoutine = StartCoroutine(InstantiateEnemiesWithDelay());
 
         IEnumerator InstantiateEnemiesWithDelay()
         {
             var totalEnemies = _enemySpawnPoints.Sum((sp) => sp.EnemyCount);
             enemyObjects = new GameObject[totalEnemies];
 
-            for (int i = 0; i < _enemySpawnPoints.Length; i++)
+            for (int i = 0, index = 0; i < _enemySpawnPoints.Length; i++)
             {
                 var spawnPoint = _enemySpawnPoints[i];
-                for (int j = 0; j < spawnPoint.EnemyCount; j++)
+                for (int j = 0; j < spawnPoint.EnemyCount; j++, index++)
                 {
-                    enemyObjects[i + j] = InstantiateEnemy(spawnPoint.SpawnPosition);
+                    enemyObjects[index] = InstantiateEnemy(spawnPoint.SpawnPosition);
                     yield return new WaitForSeconds(_enemySpawningDelay);
                 }
             }
